@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chiyambi PWA Installation and Offline Use Guide</title>
+    <style>
+      :root {
+        --teal: #12807c;
+        --teal-dark: #0d5f5c;
+        --lake: #075a75;
+        --sun: #f5b82e;
+        --ink: #12303a;
+        --slate: #4a6670;
+        --mist: #f2fafa;
+        --line: #c9dadd;
+      }
+      @page {
+        size: A4;
+        margin: 13mm 14mm 14mm;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: white;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10.3pt;
+        line-height: 1.45;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+      h1,
+      h2,
+      h3 {
+        page-break-after: avoid;
+      }
+      h1 {
+        max-width: 155mm;
+        margin-bottom: 7mm;
+        color: white;
+        font-size: 34pt;
+        line-height: 1.02;
+        letter-spacing: -0.8pt;
+      }
+      h2 {
+        margin-bottom: 5mm;
+        color: var(--teal-dark);
+        font-size: 23pt;
+        line-height: 1.08;
+      }
+      h3 {
+        margin-bottom: 2mm;
+        color: var(--ink);
+        font-size: 13.5pt;
+      }
+      p {
+        margin-bottom: 3.5mm;
+      }
+      strong {
+        color: var(--ink);
+      }
+      .page {
+        min-height: 268mm;
+        position: relative;
+        page-break-after: always;
+      }
+      .page:last-child {
+        page-break-after: auto;
+      }
+      .cover {
+        min-height: 268mm;
+        margin: -13mm -14mm -14mm;
+        padding: 18mm 16mm;
+        overflow: hidden;
+        color: white;
+        background:
+          radial-gradient(circle at 83% 16%, rgba(245, 184, 46, 0.45), transparent 25%),
+          radial-gradient(circle at 15% 88%, rgba(27, 162, 158, 0.72), transparent 28%),
+          linear-gradient(145deg, #075a75 0%, #0d5f5c 62%, #12303a 100%);
+      }
+      .cover::after {
+        content: "";
+        position: absolute;
+        right: -35mm;
+        bottom: -40mm;
+        width: 130mm;
+        height: 130mm;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 13mm rgba(255, 255, 255, 0.05),
+          0 0 0 27mm rgba(255, 255, 255, 0.04);
+      }
+      .cover-logo {
+        width: 70mm;
+        height: 26mm;
+        margin-bottom: 28mm;
+        padding: 3mm 5mm;
+        object-fit: contain;
+        background: white;
+        border-radius: 3mm;
+      }
+      .cover-kicker,
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 5mm;
+        color: var(--sun);
+        font-size: 9pt;
+        font-weight: 700;
+        letter-spacing: 1.6pt;
+        text-transform: uppercase;
+      }
+      .cover-lead {
+        max-width: 137mm;
+        color: #d8eeef;
+        font-size: 15pt;
+        line-height: 1.45;
+      }
+      .cover-meta {
+        position: absolute;
+        left: 16mm;
+        bottom: 18mm;
+        display: grid;
+        gap: 2mm;
+        color: #c8e0e3;
+        font-size: 9pt;
+      }
+      .cover-meta strong {
+        color: white;
+      }
+      .section-head {
+        margin: -2mm -1mm 8mm;
+        padding: 7mm 8mm;
+        color: white;
+        background: linear-gradient(110deg, var(--teal-dark), var(--lake));
+        border-radius: 3mm;
+      }
+      .section-head h2,
+      .section-head p {
+        margin: 0;
+        color: white;
+      }
+      .section-head p {
+        margin-top: 2mm;
+        color: #d9eef0;
+      }
+      .steps {
+        display: grid;
+        gap: 4mm;
+        margin: 5mm 0;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 12mm 1fr;
+        gap: 4mm;
+        padding: 4mm;
+        break-inside: avoid;
+        background: var(--mist);
+        border: 0.3mm solid var(--line);
+        border-radius: 2.5mm;
+      }
+      .step-number {
+        width: 10mm;
+        height: 10mm;
+        display: grid;
+        place-items: center;
+        color: white;
+        background: var(--teal);
+        border-radius: 50%;
+        font-size: 10pt;
+        font-weight: 700;
+      }
+      .step p {
+        margin: 1mm 0 0;
+        color: var(--slate);
+      }
+      .callout {
+        margin: 5mm 0;
+        padding: 4.5mm 5mm;
+        break-inside: avoid;
+        background: #fff6d9;
+        border-left: 1.4mm solid var(--sun);
+        border-radius: 0 2mm 2mm 0;
+      }
+      .callout.teal {
+        background: #e6f5f4;
+        border-left-color: var(--teal);
+      }
+      .callout p:last-child {
+        margin-bottom: 0;
+      }
+      .device-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5mm;
+        margin-top: 5mm;
+      }
+      .device-card {
+        padding: 5mm;
+        break-inside: avoid;
+        border: 0.3mm solid var(--line);
+        border-radius: 3mm;
+      }
+      .device-card h3 {
+        color: var(--lake);
+      }
+      .device-card p {
+        color: var(--slate);
+      }
+      .device-mark {
+        width: 12mm;
+        height: 12mm;
+        margin-bottom: 3mm;
+        display: grid;
+        place-items: center;
+        color: var(--teal-dark);
+        background: #c9ebe9;
+        border-radius: 50%;
+        font-size: 15pt;
+        font-weight: 700;
+      }
+      table {
+        width: 100%;
+        margin: 5mm 0;
+        border-collapse: collapse;
+        break-inside: avoid;
+      }
+      th,
+      td {
+        padding: 3mm;
+        text-align: left;
+        vertical-align: top;
+        border: 0.3mm solid var(--line);
+      }
+      th {
+        color: white;
+        background: var(--lake);
+      }
+      td {
+        background: white;
+      }
+      tr:nth-child(even) td {
+        background: var(--mist);
+      }
+      .checklist {
+        margin: 4mm 0;
+        padding: 0;
+        display: grid;
+        gap: 2.5mm;
+        list-style: none;
+      }
+      .checklist li {
+        position: relative;
+        padding-left: 9mm;
+      }
+      .checklist li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 6mm;
+        height: 6mm;
+        display: grid;
+        place-items: center;
+        color: white;
+        background: var(--teal);
+        border-radius: 50%;
+        font-size: 8pt;
+        font-weight: 700;
+      }
+      .flow {
+        margin: 6mm 0;
+        display: grid;
+        grid-template-columns: 1fr 10mm 1fr 10mm 1fr;
+        align-items: center;
+        gap: 2mm;
+      }
+      .flow-card {
+        min-height: 28mm;
+        padding: 4mm;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: var(--mist);
+        border: 0.3mm solid var(--line);
+        border-radius: 2mm;
+        font-weight: 700;
+      }
+      .flow-arrow {
+        color: var(--teal);
+        text-align: center;
+        font-size: 20pt;
+      }
+      .contact {
+        margin-top: 8mm;
+        padding: 6mm;
+        color: white;
+        background: var(--ink);
+        border-radius: 3mm;
+      }
+      .contact h3 {
+        color: white;
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 4mm;
+        color: #d4e5e8;
+        font-size: 9.5pt;
+      }
+      .contact-grid strong {
+        display: block;
+        margin-bottom: 1mm;
+        color: var(--sun);
+      }
+      .page-number {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        color: #769099;
+        font-size: 8pt;
+      }
+      .mini-note {
+        color: var(--slate);
+        font-size: 8.8pt;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <img
+        class="cover-logo"
+        src="../public/chiyambi-logo.png"
+        alt="Chiyambi Learning Platform"
+      />
+      <span class="cover-kicker">Installation and offline-use guide</span>
+      <h1>Learn anywhere.<br />Keep going offline.</h1>
+      <p class="cover-lead">
+        Step-by-step instructions for installing the Chiyambi Learning Platform on phones,
+        tablets, Chromebooks, Windows computers and Macs—and using it when internet access is
+        unavailable.
+      </p>
+      <div class="cover-meta">
+        <strong>For families, teachers, schools and centres</strong>
+        <span>Progressive Web App (PWA) edition · Version 1.0 · 2026</span>
+      </div>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Before you install</h2>
+        <p>Complete these checks once while you have a stable internet connection.</p>
+      </div>
+      <span class="eyebrow">Quick preparation</span>
+      <ul class="checklist">
+        <li>Connect the device to Wi-Fi or mobile data.</li>
+        <li>Open the official Chiyambi web address supplied by FISD.</li>
+        <li>Use an up-to-date browser. Chrome or Edge is recommended where available.</li>
+        <li>Allow enough storage for the app, learning pages and offline media.</li>
+        <li>Open Chiyambi at least once after installation so essential content can be saved.</li>
+      </ul>
+      <div class="callout teal">
+        <strong>Important:</strong>
+        Chiyambi is a Progressive Web App. On Android it installs from the browser and behaves like
+        an app; users should not download an APK from an unknown website or message.
+      </div>
+      <h3>Choose the instructions for your device</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Recommended browser</th>
+            <th>Installation command</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Android phone or tablet</td>
+            <td>Google Chrome</td>
+            <td>Install app or Add to Home screen</td>
+          </tr>
+          <tr>
+            <td>iPhone or iPad</td>
+            <td>Safari</td>
+            <td>Share → Add to Home Screen</td>
+          </tr>
+          <tr>
+            <td>Windows computer</td>
+            <td>Edge or Chrome</td>
+            <td>Apps → Install Chiyambi</td>
+          </tr>
+          <tr>
+            <td>Mac</td>
+            <td>Safari, Chrome or Edge</td>
+            <td>Add to Dock or Install page as app</td>
+          </tr>
+          <tr>
+            <td>Chromebook</td>
+            <td>Chrome</td>
+            <td>Install Chiyambi</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        If an installation option is not shown, refresh the page, browse Chiyambi for a short time,
+        and confirm that the browser is not in Private or Incognito mode.
+      </div>
+      <span class="page-number">2</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Android phone or tablet</h2>
+        <p>Recommended method: Google Chrome.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">1</span>
+          <div>
+            <h3>Open Chiyambi</h3>
+            <p>In Chrome, enter the official Chiyambi web address and wait for the home page.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div>
+            <h3>Choose Install</h3>
+            <p>
+              If Chiyambi shows an <strong>Install Chiyambi</strong> button, select it. Otherwise,
+              open Chrome’s three-dot menu and choose <strong>Install app</strong> or
+              <strong>Add to Home screen</strong>.
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div>
+            <h3>Confirm</h3>
+            <p>Select <strong>Install</strong>. The Chiyambi icon will be added to the Home screen or app list.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">4</span>
+          <div>
+            <h3>Open the installed app online once</h3>
+            <p>Launch Chiyambi from its new icon and allow the first page to finish loading.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">5</span>
+          <div>
+            <h3>Prepare lessons for offline use</h3>
+            <p>
+              While online, open the learning stage, lesson or resource you expect to use. Pages
+              already visited are the most reliable when the connection is unavailable.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="callout teal">
+        <strong>Samsung Internet:</strong> open the menu, choose <strong>Add page to</strong>, then
+        select <strong>Home screen</strong>. Chrome remains the recommended option for the fullest
+        PWA installation experience.
+      </div>
+      <h3>How to recognise the installed version</h3>
+      <p>
+        Chiyambi opens in its own window without the normal browser address bar. It also appears in
+        the device’s app list and can be pinned to the Home screen.
+      </p>
+      <span class="page-number">3</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>iPhone or iPad</h2>
+        <p>Use Safari. Other iOS browsers may not show the required Home Screen option.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">1</span>
+          <div>
+            <h3>Open Safari</h3>
+            <p>Visit the official Chiyambi web address and wait for the home page to load fully.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div>
+            <h3>Open the Share menu</h3>
+            <p>Select Safari’s Share button—the square with an upward-pointing arrow.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div>
+            <h3>Add to Home Screen</h3>
+            <p>Scroll through the available actions and select <strong>Add to Home Screen</strong>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">4</span>
+          <div>
+            <h3>Confirm the app name</h3>
+            <p>Keep the name <strong>Chiyambi</strong>, then select <strong>Add</strong>.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">5</span>
+          <div>
+            <h3>Launch and prepare offline content</h3>
+            <p>Open the new icon while online and visit the lessons or resources needed later.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout">
+        If <strong>Add to Home Screen</strong> is missing, select <strong>Edit Actions</strong> at
+        the bottom of the Share menu and add it to the list.
+      </div>
+      <h3>iPhone and iPad storage</h3>
+      <p>
+        iOS may remove cached website data when storage is very low or an app has not been used for
+        a long period. Reconnect and open Chiyambi periodically to refresh offline content.
+      </p>
+      <span class="page-number">4</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Windows and Chromebook</h2>
+        <p>Install Chiyambi as a dedicated desktop application.</p>
+      </div>
+      <div class="device-grid">
+        <article class="device-card">
+          <div class="device-mark">W</div>
+          <h3>Microsoft Edge on Windows</h3>
+          <ol>
+            <li>Open Chiyambi in Edge.</li>
+            <li>Open the three-dot menu.</li>
+            <li>Choose <strong>Apps</strong>.</li>
+            <li>Select <strong>Install Chiyambi</strong>.</li>
+            <li>Confirm installation.</li>
+            <li>Choose whether to pin it to Start or the taskbar.</li>
+          </ol>
+        </article>
+        <article class="device-card">
+          <div class="device-mark">C</div>
+          <h3>Google Chrome on Windows</h3>
+          <ol>
+            <li>Open Chiyambi in Chrome.</li>
+            <li>Select the install icon in the address bar, if shown.</li>
+            <li>Or open the three-dot menu and choose <strong>Cast, save and share</strong>.</li>
+            <li>Select <strong>Install page as app</strong>.</li>
+            <li>Confirm with <strong>Install</strong>.</li>
+          </ol>
+        </article>
+        <article class="device-card">
+          <div class="device-mark">CB</div>
+          <h3>Chromebook</h3>
+          <ol>
+            <li>Open Chiyambi in Chrome.</li>
+            <li>Select the install icon at the right of the address bar.</li>
+            <li>Select <strong>Install</strong>.</li>
+            <li>Open Chiyambi from the Chromebook Launcher.</li>
+          </ol>
+        </article>
+        <article class="device-card">
+          <div class="device-mark">PC</div>
+          <h3>After installation</h3>
+          <ol>
+            <li>Open the app while connected.</li>
+            <li>Visit required learning areas.</li>
+            <li>Pin Chiyambi for easy access.</li>
+            <li>Do not clear browser site data unless offline files are no longer needed.</li>
+          </ol>
+        </article>
+      </div>
+      <div class="callout teal">
+        A desktop PWA uses the same secure Chiyambi account and content as the website. There is no
+        separate Windows installer to download.
+      </div>
+      <span class="page-number">5</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Mac installation</h2>
+        <p>Use Safari, Chrome or Edge on a supported macOS version.</p>
+      </div>
+      <h3>Safari on macOS Sonoma or later</h3>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">1</span>
+          <div><p>Open Chiyambi in Safari.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div><p>From the menu bar, choose <strong>File → Add to Dock</strong>.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div><p>Confirm the name <strong>Chiyambi</strong> and select <strong>Add</strong>.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">4</span>
+          <div><p>Open Chiyambi from the Dock or Applications folder while online once.</p></div>
+        </div>
+      </div>
+      <h3>Chrome or Edge on Mac</h3>
+      <div class="steps">
+        <div class="step">
+          <span class="step-number">1</span>
+          <div><p>Open Chiyambi and select the install icon in the address bar.</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div>
+            <p>
+              If no icon appears, use the browser menu and choose
+              <strong>Install page as app</strong> or <strong>Apps → Install Chiyambi</strong>.
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div><p>Confirm installation, open the app, and visit the content needed offline.</p></div>
+        </div>
+      </div>
+      <div class="callout">
+        On an older macOS version without Safari’s <strong>Add to Dock</strong>, install through
+        Chrome or Edge instead.
+      </div>
+      <span class="page-number">6</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Using Chiyambi offline</h2>
+        <p>The platform stores essential app files and queues supported activity on the device.</p>
+      </div>
+      <span class="eyebrow">What happens automatically</span>
+      <div class="flow">
+        <div class="flow-card">Work or learn while offline</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-card">Activity is saved securely on the device</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-card">Saved activity syncs after reconnection</div>
+      </div>
+      <h3>When the connection is lost</h3>
+      <ul class="checklist">
+        <li>Chiyambi displays an offline notice and opens the offline page.</li>
+        <li>Select <strong>Go to home</strong> to continue with available cached content.</li>
+        <li>Previously loaded pages and core learning media remain available.</li>
+        <li>Supported activity is stored in the device’s offline queue.</li>
+      </ul>
+      <h3>When the connection returns</h3>
+      <ul class="checklist">
+        <li>Keep Chiyambi open for a short time.</li>
+        <li>A message confirms that the connection has returned.</li>
+        <li>Saved activity is sent automatically; there is no manual upload step.</li>
+        <li>If items remain pending, leave the app open and confirm the connection is stable.</li>
+      </ul>
+      <div class="callout teal">
+        <strong>Best practice:</strong> before travelling to a low-connectivity area, open the app
+        online and visit each lesson, story or resource that will be needed.
+      </div>
+      <h3>Content that may still require internet</h3>
+      <p>
+        Live classes, first-time account verification, new content that has never been opened, and
+        external media may require a connection. Offline availability grows as content is opened
+        and cached on the device.
+      </p>
+      <span class="page-number">7</span>
+    </section>
+
+    <section class="page">
+      <div class="section-head">
+        <h2>Updates, troubleshooting and removal</h2>
+        <p>Simple checks resolve most installation and offline-use problems.</p>
+      </div>
+      <h3>Get the latest version</h3>
+      <ol>
+        <li>Connect to the internet.</li>
+        <li>Open Chiyambi and keep it open briefly.</li>
+        <li>Close and reopen the app. If necessary, refresh the page once.</li>
+      </ol>
+      <h3>If Chiyambi will not install</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>What to do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No Install option</td>
+            <td>Use a supported browser, leave Private mode, reload, and browse the app briefly.</td>
+          </tr>
+          <tr>
+            <td>App opens as a normal tab</td>
+            <td>Remove the shortcut and repeat the PWA installation steps for the device.</td>
+          </tr>
+          <tr>
+            <td>Offline page has limited content</td>
+            <td>Reconnect and visit the required learning pages before going offline again.</td>
+          </tr>
+          <tr>
+            <td>Saved activity remains pending</td>
+            <td>Check the connection, reopen Chiyambi, and leave it open while it synchronizes.</td>
+          </tr>
+          <tr>
+            <td>Storage warning</td>
+            <td>Free device storage without clearing Chiyambi’s site data.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Remove the installed app</h3>
+      <p>
+        On a phone or tablet, press and hold the Chiyambi icon and choose
+        <strong>Uninstall</strong> or <strong>Remove App</strong>. On a computer, open the app menu
+        and choose <strong>Uninstall Chiyambi</strong>.
+      </p>
+      <p class="mini-note">
+        Removing the app or clearing browser site data may delete activity that is still waiting to
+        synchronize. Connect and allow synchronization before removal.
+      </p>
+      <div class="contact">
+        <h3>Need help?</h3>
+        <div class="contact-grid">
+          <div>
+            <strong>Address</strong>
+            Chintheche, Nkhata Bay, Malawi
+          </div>
+          <div>
+            <strong>Phone</strong>
+            +265 991 020 491
+          </div>
+          <div>
+            <strong>Email</strong>
+            info@fisdev.org
+          </div>
+        </div>
+      </div>
+      <span class="page-number">8</span>
+    </section>
+  </body>
+</html>
